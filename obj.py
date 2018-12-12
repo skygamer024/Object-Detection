@@ -51,19 +51,23 @@ while (True):
         obj2 = cv2.bitwise_and(mat2h,mat2h, mask= mask2)
 
         #cv2.imshow('left', obj1)        
-
-        key = cv2.waitKey(5) & 0xFF
-
-        if key == ord("q"): 
-            break
     
         im2, contours, hierarchy = cv2.findContours(mask1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         #cv2.drawContours(left_img, contours, -1, (0,255,0), 3)
         max_cnt = max(contours, key = cv2.contourArea)
         cv2.drawContours(left_img, max_cnt, -1, (0,255,0), 3)
+
+        M = cv2.moments(max_cnt)
+        cX = int(M["m10"] / M["m00"])
+        cY = int(M["m01"] / M["m00"])
+        cv2.putText(left_img, "center", (cX - 20, cY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
         
         cv2.imshow('asf', left_img)
   
+        key = cv2.waitKey(5) & 0xFF
+        if key == ord("q"): 
+            break
+        
         '''
         disparity = abs(lx-rx)
         # print(disparity)
@@ -74,5 +78,8 @@ while (True):
             y_val = ((ly - cy)*depth)/fy
         '''
 cv2.destroyAllWindows()
+    
+        
+
     
         
